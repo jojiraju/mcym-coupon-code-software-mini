@@ -51,22 +51,54 @@ const generateCouponDataURL = async (c) => {
   ctx.translate(58, H / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.font = '500 14px Poppins, sans-serif';
-  ctx.fillText('BATHERY DIOCESE', 0, -16);
+  
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '600 16px Poppins, sans-serif';
+  ctx.letterSpacing = '3px';
+  ctx.fillText('BATHERY DIOCESE', 0, -22);
+  
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 20px Poppins, sans-serif';
-  ctx.fillText('MCYM Edakara Region', 0, 12);
+  ctx.font = '800 26px Poppins, sans-serif';
+  ctx.letterSpacing = '0px';
+  ctx.fillText('MCYM Edakkara Region', 0, 14);
   ctx.restore();
 
   // ── Stub: Coupon number ───────────────────────────
+  const stubCenterX = 175;
+  const numCenterY = 210;
+  
+  // Decorative design for the coupon number
+  ctx.beginPath();
+  ctx.arc(stubCenterX, numCenterY, 75, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fill();
+  
+  ctx.beginPath();
+  ctx.arc(stubCenterX, numCenterY, 86, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.font = '600 13px Poppins, sans-serif';
-  ctx.fillText('COUPON NO.', 175, 195);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = '700 13px Poppins, sans-serif';
+  ctx.letterSpacing = '3px';
+  ctx.fillText('COUPON NO.', stubCenterX, numCenterY - 35);
+  
+  const numStr = String(c.number);
+  let fontSize = 82;
+  ctx.font = `900 ${fontSize}px Poppins, sans-serif`;
+  
+  // Dynamically shrink font size if the number is too wide
+  const maxNumWidth = 140; 
+  while (ctx.measureText(numStr).width > maxNumWidth && fontSize > 24) {
+    fontSize -= 2;
+    ctx.font = `900 ${fontSize}px Poppins, sans-serif`;
+  }
+  
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 52px Poppins, sans-serif';
-  ctx.fillText(c.number, 175, 248);
+  ctx.letterSpacing = '0px';
+  ctx.fillText(numStr, stubCenterX, numCenterY + (fontSize * 0.42));
 
   // ── Decorative circles (right side) ──────────────
   ctx.beginPath();
@@ -113,7 +145,7 @@ const generateCouponDataURL = async (c) => {
   ctx.fillStyle = '#009639';
   ctx.font = '700 13px Poppins, sans-serif';
   ctx.letterSpacing = '3px';
-  ctx.fillText('✦  CHRISTMAS LUCKY DRAW  ✦', X, 65);
+  ctx.fillText('✦  MCYM EDAKKARA REGION  ✦', X, 65);
 
   ctx.fillStyle = '#E21B22';
   ctx.font = 'bold 58px "Poppins", sans-serif';
@@ -129,46 +161,46 @@ const generateCouponDataURL = async (c) => {
 
   // ── Info: Name ────────────────────────────────────
   ctx.fillStyle = '#888888';
-  ctx.font = '600 12px Poppins, sans-serif';
+  ctx.font = '600 13px Poppins, sans-serif';
   ctx.fillText('PARTICIPANT NAME', X, 195);
   ctx.fillStyle = '#111111';
-  ctx.font = 'bold 36px Poppins, sans-serif';
+  ctx.font = 'bold 44px Poppins, sans-serif';
   ctx.fillText(c.name || '—', X, 238);
 
   // ── Info: Unit & Phone ────────────────────────────
   const Y2 = 310;
   // Unit pill
   ctx.fillStyle = '#fef2f2';
-  roundRect(ctx, X, Y2 - 30, 200, 44, 8);
+  roundRect(ctx, X, Y2 - 35, 200, 54, 8);
   ctx.fill();
   ctx.fillStyle = '#E21B22';
-  ctx.font = '600 12px Poppins, sans-serif';
-  ctx.fillText('UNIT', X + 14, Y2 - 12);
+  ctx.font = '600 13px Poppins, sans-serif';
+  ctx.fillText('PLACE', X + 14, Y2 - 14);
   ctx.fillStyle = '#111111';
-  ctx.font = 'bold 18px Poppins, sans-serif';
-  ctx.fillText(c.unit || '—', X + 14, Y2 + 8);
+  ctx.font = 'bold 22px Poppins, sans-serif';
+  ctx.fillText(c.unit || '—', X + 14, Y2 + 10);
 
   // Phone pill
   ctx.fillStyle = '#f8f9fa';
-  roundRect(ctx, X + 220, Y2 - 30, 240, 44, 8);
+  roundRect(ctx, X + 220, Y2 - 35, 240, 54, 8);
   ctx.fill();
   ctx.fillStyle = '#888888';
-  ctx.font = '600 12px Poppins, sans-serif';
-  ctx.fillText('PHONE', X + 234, Y2 - 12);
+  ctx.font = '600 13px Poppins, sans-serif';
+  ctx.fillText('PHONE', X + 234, Y2 - 14);
   ctx.fillStyle = '#111111';
-  ctx.font = 'bold 18px Poppins, sans-serif';
-  ctx.fillText(c.phone || '—', X + 234, Y2 + 8);
+  ctx.font = 'bold 22px Poppins, sans-serif';
+  ctx.fillText(c.phone || '—', X + 234, Y2 + 10);
 
   // Amount pill
   ctx.fillStyle = '#f0fdf4';
-  roundRect(ctx, X + 480, Y2 - 30, 180, 44, 8);
+  roundRect(ctx, X + 480, Y2 - 35, 180, 54, 8);
   ctx.fill();
   ctx.fillStyle = '#009639';
-  ctx.font = '600 12px Poppins, sans-serif';
-  ctx.fillText('AMOUNT', X + 494, Y2 - 12);
+  ctx.font = '600 13px Poppins, sans-serif';
+  ctx.fillText('AMOUNT', X + 494, Y2 - 14);
   ctx.fillStyle = '#009639';
-  ctx.font = 'bold 22px Poppins, sans-serif';
-  ctx.fillText('₹' + (c.amount || 20), X + 494, Y2 + 8);
+  ctx.font = 'bold 28px Poppins, sans-serif';
+  ctx.fillText('₹' + (c.amount || 20), X + 494, Y2 + 10);
 
   return canvas.toDataURL('image/png');
 };
@@ -433,7 +465,7 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
               </div>
               <div className="mc-body">
                 <div className="mc-info"><strong>Name:</strong> {coupon.name}</div>
-                {coupon.unit && <div className="mc-info"><strong>Unit:</strong> {coupon.unit}</div>}
+                {coupon.unit && <div className="mc-info"><strong>Place:</strong> {coupon.unit}</div>}
                 {coupon.phone && <div className="mc-info"><strong>Phone:</strong> {coupon.phone}</div>}
               </div>
               <div className="mc-actions">
