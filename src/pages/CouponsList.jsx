@@ -189,7 +189,8 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
     if (!c) return;
     const dataUrl = generateCouponDataURL(c);
     const link = document.createElement('a');
-    link.download = `coupon_${c.number}.png`;
+    const safeName = c.name.replace(/[^a-zA-Z0-9 ]/g, "").trim().replace(/\s+/g, "-") || "Participant";
+    link.download = `${safeName}-Coupon-${c.number}.png`;
     link.href = dataUrl;
     link.click();
   };
@@ -209,7 +210,8 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
         const c = coupons[i];
         const dataUrl = generateCouponDataURL(c);
         const base64Data = dataUrl.split(',')[1];
-        zip.file(`coupon_${c.number}.png`, base64Data, { base64: true });
+        const safeName = c.name.replace(/[^a-zA-Z0-9 ]/g, "").trim().replace(/\s+/g, "-") || "Participant";
+        zip.file(`${safeName}-Coupon-${c.number}.png`, base64Data, { base64: true });
 
         if (i % 20 === 0) {
           await new Promise(resolve => setTimeout(resolve, 10));
@@ -396,7 +398,7 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
                 {coupon.phone && <div className="mc-info"><strong>Phone:</strong> {coupon.phone}</div>}
               </div>
               <div className="mc-actions">
-                <button className="icon-btn" onClick={() => generateCouponImage(coupon)} style={{ background: 'var(--soft-green)', color: 'var(--green)', width: '36px', height: '36px' }}>
+                <button className="icon-btn" onClick={() => handleDownload(coupon.number)} style={{ background: 'var(--soft-green)', color: 'var(--green)', width: '36px', height: '36px' }}>
                   <FiDownload size={16} />
                 </button>
                 <button className="icon-btn" onClick={() => handleRemove(coupon.number)} style={{ width: '36px', height: '36px' }}>

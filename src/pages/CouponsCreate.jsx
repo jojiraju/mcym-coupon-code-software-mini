@@ -98,6 +98,7 @@ function CouponsCreate({ coupons, setCoupons, toast, setActiveView }) {
               <input
                 value={startCoupon}
                 onChange={e => { setStartCoupon(e.target.value); setErrors(p => ({ ...p, startCoupon: null })); }}
+                onWheel={e => e.target.blur()}
                 inputMode="numeric"
                 type="number"
                 min="1"
@@ -112,6 +113,7 @@ function CouponsCreate({ coupons, setCoupons, toast, setActiveView }) {
             <input
               value={quantity}
               onChange={e => { setQuantity(e.target.value); setErrors(p => ({ ...p, quantity: null })); }}
+              onWheel={e => e.target.blur()}
               inputMode="numeric"
               type="number"
               min="1"
