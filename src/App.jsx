@@ -60,7 +60,7 @@ function App() {
       <main className="main-content">
         <header className="app-header" style={{ flex: 'none', borderRadius: '0', padding: '24px 32px' }}>
           <div className="nav" style={{ justifyContent: 'space-between' }}>
-            <button className="icon-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)} title="Toggle Sidebar" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', flex: 'none' }}>
+            <button className="icon-btn hamburger-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)} title="Toggle Sidebar" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', flex: 'none' }}>
               <FiMenu size={18} />
             </button>
             <div className="rate">₹20 / COUPON</div>
