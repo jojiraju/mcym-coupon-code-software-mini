@@ -243,6 +243,12 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
 
   const filteredCoupons = coupons.filter(c => String(c.number).includes(search.toLowerCase()) || c.name.toLowerCase().includes(search.toLowerCase()));
 
+  const mobileItemsPerPage = 10;
+  const mobileIndexOfLastItem = currentPage * mobileItemsPerPage;
+  const mobileIndexOfFirstItem = mobileIndexOfLastItem - mobileItemsPerPage;
+  const currentMobileCoupons = filteredCoupons.slice(mobileIndexOfFirstItem, mobileIndexOfLastItem);
+  const totalMobilePages = Math.ceil(filteredCoupons.length / mobileItemsPerPage);
+
   const columns = [
     {
       name: 'Coupon',
@@ -346,14 +352,14 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
       <div className="card">
         <div className="card-title">
           <div><h2>Coupon register</h2><p>Search by coupon number or participant.</p></div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div className="header-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn action-btn header-btn" onClick={handleExport} title="Export CSV">
               <FiFileText size={16} style={{ color: '#10b981' }} /> Export CSV
             </button>
             <button className="btn action-btn header-btn" onClick={handleDownloadAllAsZip} disabled={isZipping} title="Download All Images">
               <FiDownloadCloud size={16} style={{ color: '#3b82f6' }} /> {isZipping ? 'Zipping...' : 'Download Coupons'}
             </button>
-            <button className="btn primary header-btn" onClick={() => setActiveView('create')}>
+            <button className="btn primary header-btn" onClick={() => setActiveView('create')} style={{ width: 'auto' }}>
               <FiPlus size={16} /> Register
             </button>
           </div>
@@ -376,6 +382,55 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
             highlightOnHover
             noDataComponent={<div className="empty" style={{ margin: '30px 0' }}><div className="emoji">🎟️</div><b>No coupons found</b><span>Registered coupons will appear here.</span></div>}
           />
+        </div>
+        <div className="mobile-cards">
+          {currentMobileCoupons.map(coupon => (
+            <div key={coupon.number} className="mobile-card">
+              <div className="mc-header">
+                <span className="mc-number">#{coupon.number}</span>
+                <span className="mc-amount">₹{coupon.amount}</span>
+              </div>
+              <div className="mc-body">
+                <div className="mc-info"><strong>Name:</strong> {coupon.name}</div>
+                {coupon.unit && <div className="mc-info"><strong>Unit:</strong> {coupon.unit}</div>}
+                {coupon.phone && <div className="mc-info"><strong>Phone:</strong> {coupon.phone}</div>}
+              </div>
+              <div className="mc-actions">
+                <button className="icon-btn" onClick={() => generateCouponImage(coupon)} style={{ background: 'var(--soft-green)', color: 'var(--green)', width: '36px', height: '36px' }}>
+                  <FiDownload size={16} />
+                </button>
+                <button className="icon-btn" onClick={() => handleRemove(coupon.number)} style={{ width: '36px', height: '36px' }}>
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+          {filteredCoupons.length === 0 && (
+             <div className="empty" style={{ margin: '30px 0' }}><div className="emoji">🎟️</div><b>No coupons found</b><span>Registered coupons will appear here.</span></div>
+          )}
+          {totalMobilePages > 1 && (
+            <div className="mobile-pagination" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', borderTop: '1px solid var(--line)', paddingTop: '16px' }}>
+              <button 
+                className="btn secondary" 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                style={{ padding: '0 16px', height: '36px', fontSize: '13px' }}
+              >
+                Previous
+              </button>
+              <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--muted)' }}>
+                Page {currentPage} of {totalMobilePages}
+              </span>
+              <button 
+                className="btn secondary" 
+                onClick={() => setCurrentPage(p => Math.min(totalMobilePages, p + 1))}
+                disabled={currentPage === totalMobilePages}
+                style={{ padding: '0 16px', height: '36px', fontSize: '13px' }}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
