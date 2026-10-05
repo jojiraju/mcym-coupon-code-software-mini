@@ -5,11 +5,11 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_FILE = resolve(__dirname, 'data', 'coupons.json');
+const DATA_FILE = resolve(__dirname, 'public', 'data', 'coupons.json');
 
 // Ensure data dir and file exist
-if (!existsSync(resolve(__dirname, 'data'))) {
-  mkdirSync(resolve(__dirname, 'data'));
+if (!existsSync(resolve(__dirname, 'public', 'data'))) {
+  mkdirSync(resolve(__dirname, 'public', 'data'), { recursive: true });
 }
 if (!existsSync(DATA_FILE)) {
   writeFileSync(DATA_FILE, '[]', 'utf-8');
