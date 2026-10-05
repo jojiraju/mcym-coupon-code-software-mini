@@ -124,8 +124,8 @@ function CouponsCreate({ coupons, setCoupons, toast, setActiveView }) {
 
         <div className="total"><span>Batch total</span><b>₹{(Number(quantity) * RATE || 0).toLocaleString('en-IN')}</b></div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '16px' }}>
-          <button className="btn secondary" onClick={() => setActiveView('coupons')} style={{ margin: 0, padding: '0 24px' }}>Cancel</button>
-          <button className="btn primary" onClick={handleAdd} style={{ margin: 0, padding: '0 24px' }}>Submit</button>
+          <button className="btn secondary" onClick={() => setActiveView('coupons')} style={{ margin: 0, padding: '0 24px', width: 'fit-content', flex: 'none' }}>Cancel</button>
+          <button className="btn primary" onClick={handleAdd} style={{ margin: 0, padding: '0 24px', width: 'fit-content', flex: 'none' }}>Submit</button>
         </div>
         <div className="helper">Example: starting coupon 10001 + quantity 50 automatically registers 10001 through 10050.</div>
       </div>
