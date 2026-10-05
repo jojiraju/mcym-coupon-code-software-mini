@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiAlertCircle, FiX } from 'react-icons/fi';
 
 function Login({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
@@ -22,6 +22,30 @@ function Login({ onLoginSuccess }) {
         <h2 style={{ margin: '0 0 8px', fontSize: '26px', fontFamily: '"Playfair Display", serif', letterSpacing: '-0.5px' }}>MCYM Admin</h2>
         <p style={{ margin: '0 0 32px', color: 'var(--muted)', fontSize: '14px' }}>Sign in to manage coupon records</p>
 
+        {loginError && (
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            background: 'var(--soft-red)', 
+            color: 'var(--red)', 
+            padding: '12px 16px', 
+            borderRadius: '12px',
+            marginBottom: '24px',
+            fontSize: '14px',
+            fontWeight: 500
+          }}>
+            <FiAlertCircle size={18} style={{ flexShrink: 0 }} />
+            <span style={{ flex: 1, textAlign: 'center' }}>{loginError}</span>
+            <button 
+              onClick={() => setLoginError('')}
+              style={{ background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0, flexShrink: 0 }}
+            >
+              <FiX size={18} />
+            </button>
+          </div>
+        )}
+
         <div className="field" style={{ textAlign: 'left' }}>
           <label>Password</label>
           <div style={{ position: 'relative' }}>
@@ -29,7 +53,7 @@ function Login({ onLoginSuccess }) {
               type={showPassword ? "text" : "password"}
               placeholder="Enter admin password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => { setPassword(e.target.value); setLoginError(''); }}
               onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               style={{ background: '#fff', paddingRight: '44px' }}
             />
@@ -44,7 +68,6 @@ function Login({ onLoginSuccess }) {
           </div>
         </div>
         <button className="btn primary" style={{ width: '100%', marginTop: '12px', fontSize: '15px', height: '54px' }} onClick={handleLogin}>Login to Dashboard</button>
-        {loginError && <p style={{ color: 'var(--red)', fontSize: '13px', marginTop: '16px', fontWeight: 600 }}>{loginError}</p>}
       </div>
     </div>
   );
