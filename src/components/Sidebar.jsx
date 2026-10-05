@@ -6,8 +6,10 @@ function Sidebar({ isSidebarOpen, activeView, setActiveView, handleLogout }) {
     <aside className={`sidebar ${!isSidebarOpen ? 'closed' : ''}`}>
       <div className="brand" style={{ marginBottom: '40px', padding: '0 8px', display: 'flex', justifyContent: isSidebarOpen ? 'flex-start' : 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
-          <div className="brand-mark" style={{ width: '40px', height: '40px', fontSize: '20px', color: 'var(--red)', background: 'var(--soft-red)', border: '1px solid var(--soft-red)', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>🎄</div>
-          <div className="brand-label"><strong style={{ color: 'var(--text)' }}>MCYM</strong><span style={{ color: 'var(--muted)' }}>Admin Panel</span></div>
+          <div className="brand-mark" style={{ width: '40px', height: '40px', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <img src="/mcym-logo.png" alt="MCYM Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '6px' }} />
+          </div>
+          <div className="brand-label"><strong style={{ color: 'var(--text)' }}>MCYM</strong><span style={{ color: 'var(--muted)' }}>Edakara Region</span></div>
         </div>
       </div>
 

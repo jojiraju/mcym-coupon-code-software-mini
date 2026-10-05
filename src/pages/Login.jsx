@@ -18,9 +18,11 @@ function Login({ onLoginSuccess }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
       <div className="card" style={{ maxWidth: '400px', width: '100%', margin: '0 16px', padding: '40px 32px', textAlign: 'center' }}>
-        <div className="brand-mark" style={{ margin: '0 auto 20px', width: '72px', height: '72px', fontSize: '34px', background: 'var(--soft-red)', color: 'var(--red)', border: '1px solid var(--soft-red)', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>🎄</div>
-        <h2 style={{ margin: '0 0 8px', fontSize: '26px', fontFamily: '"Playfair Display", serif', letterSpacing: '-0.5px' }}>MCYM Admin</h2>
-        <p style={{ margin: '0 0 32px', color: 'var(--muted)', fontSize: '14px' }}>Sign in to manage coupon records</p>
+        <div className="brand-mark" style={{ margin: '0 auto 20px', width: '80px', height: '80px', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+          <img src="/mcym-logo.png" alt="MCYM Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '12px' }} />
+        </div>
+        <h2 style={{ margin: '0 0 8px', fontSize: '26px', fontFamily: '"Playfair Display", serif', letterSpacing: '-0.5px' }}>MCYM Edakara Region</h2>
+        <p style={{ margin: '0 0 24px', color: 'var(--muted)', fontSize: '14px' }}>Sign in to manage coupon records</p>
 
         {loginError && (
           <div style={{ 

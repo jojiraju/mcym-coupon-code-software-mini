@@ -4,31 +4,33 @@ import { BiSearch } from 'react-icons/bi';
 import { FiDownload, FiTrash2, FiPlus, FiFileText, FiArchive, FiDownloadCloud, FiX, FiAlertCircle } from 'react-icons/fi';
 import DataTable from 'react-data-table-component';
 
-const generateCouponDataURL = (c) => {
+const generateCouponDataURL = async (c) => {
   const W = 1050, H = 420;
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // ── Dark background ──────────────────────────────
-  ctx.fillStyle = '#0f1923';
+  // Load logo
+  const img = new Image();
+  img.src = '/mcym-logo.png';
+  await new Promise(resolve => {
+    img.onload = resolve;
+    img.onerror = resolve; // proceed even if missing
+  });
+
+  // ── Light background ──────────────────────────────
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
 
-  // ── Left accent panel (deep red) ─────────────────
-  const panelGrad = ctx.createLinearGradient(0, 0, 0, H);
-  panelGrad.addColorStop(0, '#941c34');
-  panelGrad.addColorStop(1, '#5a1020');
-  ctx.fillStyle = panelGrad;
+  // ── Left accent panel (MCYM Red) ─────────────────
+  ctx.fillStyle = '#E21B22';
   ctx.fillRect(0, 0, 280, H);
 
-  // ── Gold top accent bar ───────────────────────────
-  const topBar = ctx.createLinearGradient(0, 0, W, 0);
-  topBar.addColorStop(0, '#dca84a');
-  topBar.addColorStop(0.5, '#f0c76b');
-  topBar.addColorStop(1, '#dca84a');
-  ctx.fillStyle = topBar;
-  ctx.fillRect(0, 0, W, 6);
+  // ── Green top and bottom accent bars ───────────────────────────
+  ctx.fillStyle = '#009639';
+  ctx.fillRect(0, 0, W, 8);
+  ctx.fillRect(0, H - 8, W, 8);
 
   // ── Circle cutouts for perforation ───────────────
   ctx.save();
@@ -40,7 +42,7 @@ const generateCouponDataURL = (c) => {
   // ── Perforated tear line ──────────────────────────
   ctx.setLineDash([12, 10]);
   ctx.lineWidth = 2;
-  ctx.strokeStyle = 'rgba(220,168,74,0.5)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.4)';
   ctx.beginPath(); ctx.moveTo(280, 25); ctx.lineTo(280, H - 25); ctx.stroke();
   ctx.setLineDash([]);
 
@@ -49,100 +51,124 @@ const generateCouponDataURL = (c) => {
   ctx.translate(58, H / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.font = '500 14px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.font = '500 14px Poppins, sans-serif';
   ctx.fillText('BATHERY DIOCESE', 0, -16);
-  ctx.fillStyle = '#f0c76b';
-  ctx.font = 'bold 20px Inter, sans-serif';
-  ctx.fillText('MCYM EDAKKARA', 0, 12);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 20px Poppins, sans-serif';
+  ctx.fillText('MCYM Edakara Region', 0, 12);
   ctx.restore();
 
   // ── Stub: Coupon number ───────────────────────────
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.4)';
-  ctx.font = '600 13px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.font = '600 13px Poppins, sans-serif';
   ctx.fillText('COUPON NO.', 175, 195);
-  ctx.fillStyle = '#f0c76b';
-  ctx.font = 'bold 52px Inter, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 52px Poppins, sans-serif';
   ctx.fillText(c.number, 175, 248);
 
   // ── Decorative circles (right side) ──────────────
   ctx.beginPath();
   ctx.arc(950, 60, 100, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(148,28,52,0.15)';
+  ctx.fillStyle = 'rgba(226,27,34,0.03)';
   ctx.fill();
   ctx.beginPath();
   ctx.arc(990, H - 50, 70, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(220,168,74,0.07)';
+  ctx.fillStyle = 'rgba(0,150,57,0.03)';
   ctx.fill();
 
+  // ── Logo on the right side (Rounded) ──────────────
+  if (img.complete && img.naturalHeight !== 0) {
+    const cx = 850 + 70;
+    const cy = 40 + 70;
+    
+    // Draw white circle background
+    ctx.beginPath();
+    ctx.arc(cx, cy, 70, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Calculate aspect-ratio preserving dimensions
+    const maxDimension = 100; // Leave padding inside the 140px circle
+    const ratio = img.naturalWidth / img.naturalHeight;
+    let dw = maxDimension;
+    let dh = maxDimension;
+    if (ratio > 1) {
+      dh = maxDimension / ratio;
+    } else {
+      dw = maxDimension * ratio;
+    }
+
+    // Draw the image centered
+    ctx.drawImage(img, cx - dw / 2, cy - dh / 2, dw, dh);
+  }
   // ── Main title ────────────────────────────────────
   ctx.textAlign = 'left';
   const X = 320;
 
-  ctx.fillStyle = '#f0c76b';
-  ctx.font = '700 13px Inter, sans-serif';
+  ctx.fillStyle = '#009639';
+  ctx.font = '700 13px Poppins, sans-serif';
   ctx.letterSpacing = '3px';
   ctx.fillText('✦  CHRISTMAS LUCKY DRAW  ✦', X, 65);
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 58px "Playfair Display", serif';
+  ctx.fillStyle = '#E21B22';
+  ctx.font = 'bold 58px "Poppins", sans-serif';
   ctx.fillText('Lucky Draw', X, 135);
 
   // ── Thin divider ─────────────────────────────────
   ctx.beginPath();
   ctx.moveTo(X, 155);
   ctx.lineTo(1000, 155);
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.strokeStyle = '#f0f0f0';
   ctx.lineWidth = 1;
   ctx.stroke();
 
   // ── Info: Name ────────────────────────────────────
-  ctx.fillStyle = 'rgba(255,255,255,0.45)';
-  ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillStyle = '#888888';
+  ctx.font = '600 12px Poppins, sans-serif';
   ctx.fillText('PARTICIPANT NAME', X, 195);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 36px Inter, sans-serif';
+  ctx.fillStyle = '#111111';
+  ctx.font = 'bold 36px Poppins, sans-serif';
   ctx.fillText(c.name || '—', X, 238);
 
   // ── Info: Unit & Phone ────────────────────────────
   const Y2 = 310;
   // Unit pill
-  ctx.fillStyle = 'rgba(148,28,52,0.5)';
+  ctx.fillStyle = '#fef2f2';
   roundRect(ctx, X, Y2 - 30, 200, 44, 8);
   ctx.fill();
-  ctx.fillStyle = '#f0c76b';
-  ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillStyle = '#E21B22';
+  ctx.font = '600 12px Poppins, sans-serif';
   ctx.fillText('UNIT', X + 14, Y2 - 12);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 18px Inter, sans-serif';
+  ctx.fillStyle = '#111111';
+  ctx.font = 'bold 18px Poppins, sans-serif';
   ctx.fillText(c.unit || '—', X + 14, Y2 + 8);
 
   // Phone pill
-  ctx.fillStyle = 'rgba(255,255,255,0.07)';
+  ctx.fillStyle = '#f8f9fa';
   roundRect(ctx, X + 220, Y2 - 30, 240, 44, 8);
   ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.45)';
-  ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillStyle = '#888888';
+  ctx.font = '600 12px Poppins, sans-serif';
   ctx.fillText('PHONE', X + 234, Y2 - 12);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 18px Inter, sans-serif';
+  ctx.fillStyle = '#111111';
+  ctx.font = 'bold 18px Poppins, sans-serif';
   ctx.fillText(c.phone || '—', X + 234, Y2 + 8);
 
   // Amount pill
-  ctx.fillStyle = 'rgba(220,168,74,0.18)';
+  ctx.fillStyle = '#f0fdf4';
   roundRect(ctx, X + 480, Y2 - 30, 180, 44, 8);
   ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.45)';
-  ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillStyle = '#009639';
+  ctx.font = '600 12px Poppins, sans-serif';
   ctx.fillText('AMOUNT', X + 494, Y2 - 12);
-  ctx.fillStyle = '#f0c76b';
-  ctx.font = 'bold 22px Inter, sans-serif';
+  ctx.fillStyle = '#009639';
+  ctx.font = 'bold 22px Poppins, sans-serif';
   ctx.fillText('₹' + (c.amount || 20), X + 494, Y2 + 8);
-
-  // ── Bottom gold bar ───────────────────────────────
-  ctx.fillStyle = 'rgba(220,168,74,0.6)';
-  ctx.fillRect(0, H - 6, W, 6);
 
   return canvas.toDataURL('image/png');
 };
@@ -184,10 +210,10 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
     setDeleteConfirm(null);
   };
 
-  const handleDownload = (number) => {
+  const handleDownload = async (number) => {
     const c = coupons.find(x => x.number === number);
     if (!c) return;
-    const dataUrl = generateCouponDataURL(c);
+    const dataUrl = await generateCouponDataURL(c);
     
     fetch(dataUrl)
       .then(res => res.blob())
@@ -221,7 +247,7 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
 
       for (let i = 0; i < coupons.length; i++) {
         const c = coupons[i];
-        const dataUrl = generateCouponDataURL(c);
+        const dataUrl = await generateCouponDataURL(c);
         const base64Data = dataUrl.split(',')[1];
         const safeName = c.name.replace(/[^a-zA-Z0-9 ]/g, "").trim().replace(/\s+/g, "-") || "Participant";
         zip.file(`${safeName}-Coupon-${c.number}.png`, base64Data, { base64: true });
