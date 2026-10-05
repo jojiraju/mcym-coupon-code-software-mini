@@ -9,7 +9,8 @@ import CouponsList from './pages/CouponsList';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 
-const API = 'http://localhost:3001/api/coupons';
+import { db } from './firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 function App() {
   const [coupons, setCoupons] = useState([]);
@@ -20,22 +21,39 @@ function App() {
   // Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(() => sessionStorage.getItem('mcymAuth') === 'true');
 
-  // Load from JSON file on mount
+  // Load from Firebase on mount
   useEffect(() => {
-    fetch(API)
-      .then(r => r.json())
-      .then(data => { setCoupons(Array.isArray(data) ? data : []); setLoading(false); })
-      .catch(() => { setCoupons([]); setLoading(false); });
+    const loadData = async () => {
+      try {
+        const docRef = doc(db, 'mcym', 'coupons');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data().list;
+          setCoupons(Array.isArray(data) ? data : []);
+        } else {
+          setCoupons([]);
+        }
+      } catch (error) {
+        console.error("Error loading from Firebase:", error);
+        toast.error('Could not load data from Firebase');
+        setCoupons([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
-  // Save to JSON file whenever coupons change
-  const saveCoupons = (updated) => {
+  // Save to Firebase whenever coupons change
+  const saveCoupons = async (updated) => {
     setCoupons(updated);
-    fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updated)
-    }).catch(() => toast.error('Could not save to file. Is the server running?'));
+    try {
+      const docRef = doc(db, 'mcym', 'coupons');
+      await setDoc(docRef, { list: updated });
+    } catch (error) {
+      console.error("Error saving to Firebase:", error);
+      toast.error('Could not save to Firebase. Please check your config.');
+    }
   };
 
   const handleLogout = () => {
