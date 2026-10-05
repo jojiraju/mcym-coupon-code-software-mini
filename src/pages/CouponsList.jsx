@@ -188,11 +188,24 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
     const c = coupons.find(x => x.number === number);
     if (!c) return;
     const dataUrl = generateCouponDataURL(c);
-    const link = document.createElement('a');
-    const safeName = c.name.replace(/[^a-zA-Z0-9 ]/g, "").trim().replace(/\s+/g, "-") || "Participant";
-    link.download = `${safeName}-Coupon-${c.number}.png`;
-    link.href = dataUrl;
-    link.click();
+    
+    fetch(dataUrl)
+      .then(res => res.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        const safeName = c.name.replace(/[^a-zA-Z0-9 ]/g, "").trim().replace(/\s+/g, "-") || "Participant";
+        link.download = `${safeName}-Coupon-${c.number}.png`;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      })
+      .catch(err => {
+        console.error("Download error:", err);
+        toast.error("Error downloading coupon.");
+      });
   };
 
   const handleDownloadAllAsZip = async () => {
