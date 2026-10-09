@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { FiShuffle, FiAward, FiTrash2, FiRotateCcw, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { FiShuffle, FiAward, FiTrash2, FiRotateCcw, FiMaximize2, FiMinimize2, FiX } from 'react-icons/fi';
 
 const WINNERS_KEY = 'mcymLuckyDrawWinners';
 const LOOPS = 6;
@@ -77,6 +78,35 @@ function Confetti() {
   );
 }
 
+function ConfirmResetModal({ count, onCancel, onConfirm }) {
+  const cancelRef = useRef(null);
+
+  useEffect(() => {
+    cancelRef.current?.focus();
+    const onKey = (e) => { if (e.key === 'Escape') onCancel(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onCancel]);
+
+  return createPortal(
+    <div className="ld-modal-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) onCancel(); }}>
+      <div className="ld-modal" role="alertdialog" aria-modal="true" aria-labelledby="ld-reset-title" aria-describedby="ld-reset-desc">
+        <button className="ld-modal-close" onClick={onCancel} aria-label="Close"><FiX /></button>
+        <div className="ld-modal-icon"><FiRotateCcw /></div>
+        <h3 id="ld-reset-title">Reset the draw?</h3>
+        <p id="ld-reset-desc">
+          This clears all <b>{count} {count === 1 ? 'winner' : 'winners'}</b> and puts every coupon back in the draw. This can't be undone.
+        </p>
+        <div className="ld-modal-actions">
+          <button ref={cancelRef} className="ld-modal-btn" onClick={onCancel}>Cancel</button>
+          <button className="ld-modal-btn danger" onClick={onConfirm}>Yes, reset</button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 function LuckyDraw({ coupons, toast }) {
   const [winners, setWinners] = useState(loadWinners);
   const [reels, setReels] = useState([]);
@@ -84,6 +114,7 @@ function LuckyDraw({ coupons, toast }) {
   const [revealed, setRevealed] = useState(null);
   const [drawCount, setDrawCount] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isResetOpen, setIsResetOpen] = useState(false);
   const timerRef = useRef(null);
   const stageRef = useRef(null);
   const listRef = useRef(null);
@@ -127,7 +158,7 @@ function LuckyDraw({ coupons, toast }) {
   const reelState = Array.from({ length: width }, (_, i) => reels[i] || { index: 0, duration: 0 });
 
   const handleDraw = () => {
-    if (phase === 'spinning') return;
+    if (phase === 'spinning' || isResetOpen) return;
     if (!coupons.length) return toast.error('There are no registered coupons.');
     if (!eligible.length) return toast.error('Every coupon has already won.');
 
@@ -163,13 +194,16 @@ function LuckyDraw({ coupons, toast }) {
     }
   };
 
+  const closeReset = useCallback(() => setIsResetOpen(false), []);
+
   const handleReset = () => {
-    if (!window.confirm('Clear all winners and start a new draw?')) return;
+    setIsResetOpen(false);
     clearTimeout(timerRef.current);
     setWinners([]);
     setRevealed(null);
     setReels([]);
     setPhase('idle');
+    toast.success('Draw reset. All coupons are back in.');
   };
 
   const toggleFullscreen = () => {
@@ -245,7 +279,7 @@ function LuckyDraw({ coupons, toast }) {
             <p>{winners.length ? `${winners.length} drawn` : 'Nobody yet'}</p>
           </div>
           {winners.length > 0 && (
-            <button className="ld-ghost-btn" onClick={handleReset} disabled={isSpinning}>
+            <button className="ld-ghost-btn" onClick={() => setIsResetOpen(true)} disabled={isSpinning}>
               <FiRotateCcw /> Reset
             </button>
           )}
@@ -275,6 +309,8 @@ function LuckyDraw({ coupons, toast }) {
           </div>
         )}
       </aside>
+
+      {isResetOpen && <ConfirmResetModal count={winners.length} onCancel={closeReset} onConfirm={handleReset} />}
     </div>
   );
 }
