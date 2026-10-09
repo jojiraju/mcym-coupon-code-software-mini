@@ -482,26 +482,50 @@ function CouponsList({ coupons, setCoupons, toast, setActiveView }) {
              <div className="empty" style={{ margin: '30px 0' }}><div className="emoji">🎟️</div><b>No coupons found</b><span>Registered coupons will appear here.</span></div>
           )}
           {totalMobilePages > 1 && (
-            <div className="mobile-pagination" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', borderTop: '1px solid var(--line)', paddingTop: '16px' }}>
-              <button 
-                className="btn secondary" 
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                style={{ padding: '0 16px', height: '36px', fontSize: '13px' }}
-              >
-                Previous
-              </button>
-              <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--muted)' }}>
+            <div className="mobile-pagination" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', marginTop: '16px', borderTop: '1px solid var(--line)', paddingTop: '16px' }}>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  className="btn secondary"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                  aria-label="First page"
+                  title="First page"
+                  style={{ padding: '0 10px', height: '36px', fontSize: '15px' }}
+                >
+                  «
+                </button>
+                <button
+                  className="btn secondary"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  style={{ padding: '0 12px', height: '36px', fontSize: '13px' }}
+                >
+                  Prev
+                </button>
+              </div>
+              <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--muted)', textAlign: 'center' }}>
                 Page {currentPage} of {totalMobilePages}
               </span>
-              <button 
-                className="btn secondary" 
-                onClick={() => setCurrentPage(p => Math.min(totalMobilePages, p + 1))}
-                disabled={currentPage === totalMobilePages}
-                style={{ padding: '0 16px', height: '36px', fontSize: '13px' }}
-              >
-                Next
-              </button>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  className="btn secondary"
+                  onClick={() => setCurrentPage(p => Math.min(totalMobilePages, p + 1))}
+                  disabled={currentPage === totalMobilePages}
+                  style={{ padding: '0 12px', height: '36px', fontSize: '13px' }}
+                >
+                  Next
+                </button>
+                <button
+                  className="btn secondary"
+                  onClick={() => setCurrentPage(totalMobilePages)}
+                  disabled={currentPage === totalMobilePages}
+                  aria-label="Last page"
+                  title="Last page"
+                  style={{ padding: '0 10px', height: '36px', fontSize: '15px' }}
+                >
+                  »
+                </button>
+              </div>
             </div>
           )}
         </div>

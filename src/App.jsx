@@ -6,6 +6,7 @@ import './index.css';
 import Dashboard from './pages/Dashboard';
 import CouponsCreate from './pages/CouponsCreate';
 import CouponsList from './pages/CouponsList';
+import LuckyDraw from './pages/LuckyDraw';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 
@@ -87,12 +88,14 @@ function App() {
             <h1 style={{ fontSize: '32px' }}>
               {activeView === 'dashboard' ? 'Dashboard Overview' :
                 activeView === 'create' ? 'Register Coupons' :
-                  'Coupon Management'}
+                  activeView === 'draw' ? 'Lucky Draw' :
+                    'Coupon Management'}
             </h1>
             <p>
               {activeView === 'dashboard' ? 'Track your campaign progress.' :
                 activeView === 'create' ? 'Add new batches of coupons to the system.' :
-                  'Search and manage existing coupons.'}
+                  activeView === 'draw' ? 'Pick the winning coupons.' :
+                    'Search and manage existing coupons.'}
             </p>
           </div>
         </header>
@@ -107,6 +110,7 @@ function App() {
               {activeView === 'dashboard' && <Dashboard coupons={coupons} />}
               {activeView === 'create' && <CouponsCreate coupons={coupons} setCoupons={saveCoupons} toast={toast} setActiveView={setActiveView} />}
               {activeView === 'coupons' && <CouponsList coupons={coupons} setCoupons={saveCoupons} toast={toast} setActiveView={setActiveView} />}
+              {activeView === 'draw' && <LuckyDraw coupons={coupons} toast={toast} />}
             </>
           )}
         </div>
