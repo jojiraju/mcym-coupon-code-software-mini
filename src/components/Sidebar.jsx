@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiHome, FiList, FiPlusCircle, FiLogOut, FiGift } from 'react-icons/fi';
+import { FiHome, FiList, FiPlusCircle, FiLogOut, FiGift, FiCreditCard } from 'react-icons/fi';
 
 function Sidebar({ isSidebarOpen, activeView, setActiveView, handleLogout }) {
   return (
@@ -22,6 +22,9 @@ function Sidebar({ isSidebarOpen, activeView, setActiveView, handleLogout }) {
         </button>
         <button className={`nav-item ${activeView === 'draw' ? 'active' : ''}`} onClick={() => setActiveView('draw')} title="Lucky Draw">
           <FiGift /> <span className="nav-label">Lucky Draw</span>
+        </button>
+        <button className={`nav-item ${activeView === 'members' ? 'active' : ''}`} onClick={() => setActiveView('members')} title="Member Cards">
+          <FiCreditCard /> <span className="nav-label">Member Cards</span>
         </button>
       </nav>
 

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import CouponsCreate from './pages/CouponsCreate';
 import CouponsList from './pages/CouponsList';
 import LuckyDraw from './pages/LuckyDraw';
+import MemberCards from './pages/MemberCards';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 
@@ -89,13 +90,15 @@ function App() {
               {activeView === 'dashboard' ? 'Dashboard Overview' :
                 activeView === 'create' ? 'Register Coupons' :
                   activeView === 'draw' ? 'Lucky Draw' :
-                    'Coupon Management'}
+                    activeView === 'members' ? 'Member Cards' :
+                      'Coupon Management'}
             </h1>
             <p>
               {activeView === 'dashboard' ? 'Track your campaign progress.' :
                 activeView === 'create' ? 'Add new batches of coupons to the system.' :
                   activeView === 'draw' ? 'Pick the winning coupons.' :
-                    'Search and manage existing coupons.'}
+                    activeView === 'members' ? 'Issue printable and digital ID cards for MCYM members.' :
+                      'Search and manage existing coupons.'}
             </p>
           </div>
         </header>
@@ -111,6 +114,7 @@ function App() {
               {activeView === 'create' && <CouponsCreate coupons={coupons} setCoupons={saveCoupons} toast={toast} setActiveView={setActiveView} />}
               {activeView === 'coupons' && <CouponsList coupons={coupons} setCoupons={saveCoupons} toast={toast} setActiveView={setActiveView} />}
               {activeView === 'draw' && <LuckyDraw coupons={coupons} toast={toast} />}
+              {activeView === 'members' && <MemberCards toast={toast} />}
             </>
           )}
         </div>

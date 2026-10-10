@@ -11,11 +11,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.11",
+    "@mui/x-date-pickers": "^8.29.4",
     "cors": "^2.8.6",
+    "dayjs": "^1.11.23",
     "express": "^5.2.1",
     "file-saver": "^2.0.5",
     "firebase": "^12.19.0",
     "jszip": "^3.10.2",
+    "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-data-table-component": "^8.11.0",
     "react-dom": "^19.2.8",
